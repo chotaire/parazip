@@ -5,15 +5,15 @@ Parallel (multi-threaded) tar.bz2 archiving of a directory with lowest priority 
 
 ## Dependencies on CentOS/RHEL/Fedora
 
-* util-linux
-* coreutils
-* pbzip2
+  * util-linux
+  * coreutils
+  * pbzip2
 
 ## Installation
 
-* Download from [Github](https://github.com/chotaire/parazip/releases)
-* tar -jxvf parazip.tar.bz2
-* mv parazip.sh /usr/local/bin/parazip
+  * Download from [Github](https://github.com/chotaire/parazip/releases)
+  * tar -jxvf parazip.tar.bz2
+  * mv parazip.sh /usr/local/bin/parazip
 
 ## Usage
 
@@ -28,5 +28,3 @@ Will check for dependencies and install if not available.
 `parazip <dir>`
 
 Where \<dir\> is a directory name found in the current directory.
-
-
