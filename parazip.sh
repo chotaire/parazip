@@ -14,19 +14,17 @@ then
 elif [ "$1" = "install" ]
 then
         if ((grep -q -i "centos" /etc/os-release) || (grep -q -i "fedora" /etc/os-release) || (grep -q -i "rhel" /etc/os-release)) then
-                if ! rpm -qa | grep -qw util-linux
-                        then
+                if ! rpm -qa | grep -qw util-linux then
                         yum install util-linux -y
-                        fi
-                if ! rpm -qa | grep -qw coreutils
-                        then
+                fi
+                if ! rpm -qa | grep -qw coreutils then
                         yum install coreutils -y
-                        fi
-                if ! rpm -qa | grep -qw pbzip2
-                        then
+                fi
+                if ! rpm -qa | grep -qw pbzip2 then
                         yum install pbzip2 -y
-                        fi
-        else echo "No Redhat-based operating system found. Please install dependancies manually."
+                fi
+        else 
+                echo "No Redhat-based operating system found. Please install dependancies manually."
         fi
 
 else
