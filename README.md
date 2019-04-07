@@ -12,7 +12,7 @@ Parallel (multi-threaded) tar.bz2 archiving of a directory with lowest priority 
 ## Installation
 
 * Download from [Chotaire Git](https://git.chotaire.net/chotaire/parazip/releases) - [Github](https://github.com/chotaire/parazip/releases)
-* tar -zxvf parazip.tar.bz2
+* tar -jxvf parazip.tar.bz2
 * mv parazip.sh /usr/local/bin/parazip
 
 ## Usage
