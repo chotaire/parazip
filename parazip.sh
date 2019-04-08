@@ -1,10 +1,10 @@
 # Parallel (multi threaded) bzip2 of a directory with lowest priority CPU/IO scheduling.
 # Utilizes all cpu cores and detaches into background, will syslog when it's done.
-# (c) 2018-2019 Chotaire - https://git.chotaire.net/chotaire/parazip
+# Originally written by (c) 2019 Chotaire - https://git.chotaire.net/chotaire/parazip
 
 # This Source Code Form is subject to the terms of the Mozilla Public
-# License v2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 if ([ "$1" = "" ] || [ "$1" = "help" ] || [ "$1" = "--help" ])
 then
