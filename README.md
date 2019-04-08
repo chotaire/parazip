@@ -21,8 +21,8 @@ RPMs are built for CentOS 7 (requires EPEL), all currently supported Fedora rele
 
 ### Other Linux
 *   Download from [Github](https://github.com/chotaire/parazip/releases) or [Chotaire Git](https://git.chotaire.net/chotaire/parazip/releases)
-*   Unpack source with tar -jxvf <filename>
-*   mv parazip /usr/local/bin/parazip
+*   Unpack source code
+*   chmod ugo+x parazip ; mv parazip /usr/local/bin
 
 ## Usage
 
