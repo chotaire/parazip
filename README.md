@@ -31,7 +31,10 @@ yum install parazip
 ### Other Linux
 *   Download from [Github](https://github.com/chotaire/parazip/releases) or [Chotaire Git](https://git.chotaire.net/chotaire/parazip/releases)
 *   Unpack source code
-*   chmod ugo+x parazip ; mv parazip /usr/local/bin
+
+```Shell
+chmod ugo+x parazip ; mv parazip /usr/local/bin
+```
 
 ## Usage
 
