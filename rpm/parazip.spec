@@ -1,5 +1,5 @@
 Name: parazip
-Version: 0.2.1
+Version: 0.2.2
 Release: 1%{?dist}
 Summary: Parallel (multi-threaded) tar.bz2 archiving of a directory with lowest priority CPU and I/O scheduling.
 
