@@ -16,13 +16,13 @@ Parallel (multi-threaded) tar.bz2 archiving of a directory with lowest priority 
 RPMs are [built from releases](https://copr.fedorainfracloud.org/coprs/chotaire/parazip/ "Parazip Repos on Fedora copr") for CentOS 7 (requires EPEL) and all currently supported Fedora versions.
 
 ### Fedora
-```
+```Shell
 dnf copr enable chotaire/parazip
 dnf install parazip
 ```
 
 ### CentOS / RHEL
-```
+```Shell
 yum install yum-plugin-copr
 yum copr enable chotaire/parazip
 yum install parazip
