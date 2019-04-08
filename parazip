@@ -2,33 +2,37 @@
 
 # Parallel (multi threaded) bzip2 of a directory with lowest priority CPU/IO scheduling.
 # Utilizes all cpu cores and detaches into background, will syslog when it's done.
-# Originally written by (c) 2019 Chotaire - https://git.chotaire.net/chotaire/parazip
+# Originally written by (c) 2019 Chotaire - https://github.com/chotaire/parazip
 
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+version=0.2.1
+
 if ([ "$1" = "" ] || [ "$1" = "help" ] || [ "$1" = "--help" ])
 then
+        echo -e "\e[1mparazip Version $version\e[0m - https://github.com/chotaire/parazip"
+        echo ""
         echo "parazip <dir> (where <dir> is a directory name found in the current directory)"
         echo "parazip install (will check for dependancies and install if not available)"
 
 elif [ "$1" = "install" ]
 then
         if ((grep -q -i "centos" /etc/os-release) || (grep -q -i "fedora" /etc/os-release) || (grep -q -i "rhel" /etc/os-release)) then
-                if ! rpm -qa | grep -qw util-linux 
+                if ! rpm -qa | grep -qw util-linux
                 then
                         yum install util-linux -y
                 fi
-                if ! rpm -qa | grep -qw coreutils 
+                if ! rpm -qa | grep -qw coreutils
                 then
                         yum install coreutils -y
                 fi
-                if ! rpm -qa | grep -qw pbzip2 
+                if ! rpm -qa | grep -qw pbzip2
                 then
                         yum install pbzip2 -y
                 fi
-        else 
+        else
                 echo "No Redhat-based operating system found. Please install dependancies manually."
         fi
 
