@@ -38,11 +38,9 @@ install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
-v0.2.1
-* Mon Apr  8 2019 chotaire <chotaire@chotaire.net>
+* v0.2.1 - Mon Apr  8 2019 chotaire <chotaire@chotaire.net>
 - Now displays version when viewing --help
 - This release is also used for testing dnf updates and autobuild
 
-v0.2
-* Mon Apr  8 2019 chotaire <chotaire@chotaire.net>
+* v0.2 - Mon Apr  8 2019 chotaire <chotaire@chotaire.net>
 - Initial RPM release
