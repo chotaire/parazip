@@ -12,9 +12,17 @@ Parallel (multi-threaded) tar.bz2 archiving of a directory with lowest priority 
 *   pbzip2
 
 ## Installation
+
+### CentOS/RHEL/Fedora
+RPMs are built for CentOS 7 (requires EPEL), all currently supported Fedora releases plus Fedora Rawhide.
+
+*   dnf copr enable chotaire/parazip
+*   dnf install parazip
+
+### Other Linux
 *   Download from [Github](https://github.com/chotaire/parazip/releases) or [Chotaire Git](https://git.chotaire.net/chotaire/parazip/releases)
-*   tar -jxvf parazip.tar.bz2
-*   mv parazip /usr/bin/parazip
+*   Unpack source with tar -jxvf <filename>
+*   mv parazip /usr/local/bin/parazip
 
 ## Usage
 
