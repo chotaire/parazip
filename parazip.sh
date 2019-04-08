@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Parallel (multi threaded) bzip2 of a directory with lowest priority CPU/IO scheduling.
 # Utilizes all cpu cores and detaches into background, will syslog when it's done.
 # Originally written by (c) 2019 Chotaire - https://git.chotaire.net/chotaire/parazip
