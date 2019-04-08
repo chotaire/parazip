@@ -12,7 +12,7 @@ version=0.2.1
 
 if ([ "$1" = "" ] || [ "$1" = "help" ] || [ "$1" = "--help" ])
 then
-        echo -e "\e[1mparazip Version $version\e[0m - https://github.com/chotaire/parazip"
+        echo -e "\e[1mparazip version $version\e[0m - https://github.com/chotaire/parazip"
         echo ""
         echo "parazip <dir> (where <dir> is a directory name found in the current directory)"
         echo "parazip install (will check for dependancies and install if not available)"
@@ -40,8 +40,8 @@ else
         dirname=$(echo $1 | sed 's:/*$::')
         nohup bash -c "tar -c $dirname | pbzip2 -vc > $dirname.tar.bz2 ; logger -t parazip Finished." </dev/null &>/dev/null &
         sleep 1
-        PID=`pgrep -f "pbzip2"`
-        PID2=`pgrep -f "tar -c"`
+        PID=$(pgrep -f "pbzip2")
+        PID2=$(pgrep -f "tar -c")
         renice +20 $PID $PID2
         ionice -c 3 -p $PID $PID2
 fi
