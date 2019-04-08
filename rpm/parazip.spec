@@ -1,5 +1,5 @@
 Name: parazip
-Version: 0.2
+Version: 0.2.1
 Release: 1%{?dist}
 Summary: Parallel (multi-threaded) tar.bz2 archiving of a directory with lowest priority CPU and I/O scheduling.
 
@@ -38,5 +38,11 @@ install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
+v0.2.1
 * Mon Apr  8 2019 chotaire <chotaire@chotaire.net>
-- Initial release
+- Now displays version when viewing --help
+- This release is also used for testing dnf updates and autobuild
+
+v0.2
+* Mon Apr  8 2019 chotaire <chotaire@chotaire.net>
+- Initial RPM release
