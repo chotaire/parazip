@@ -1,7 +1,7 @@
 Name: parazip
 Version: 0.2.3
 Release: 1%{?dist}
-Summary: Parallel (multi-threaded) tar.bz2 archiving of a directory with lowest priority CPU and I/O scheduling.
+Summary: Multi-threaded (parallel) tar.bz2 archiving of a directory with lowest priority CPU and I/O scheduling.
 
 License: MPL2.0
 URL: https://github.com/chotaire/parazip
@@ -18,7 +18,7 @@ Requires: bash
 
 %description
 
-Parallel (multi-threaded) tar.bz2 archiving of a directory with lowest
+Multi-threaded (parallel) tar.bz2 archiving of a directory with lowest
 priority CPU and I/O scheduling. Utilizes all cpu cores and detaches into
 background, will syslog when it's done.
 
