@@ -13,7 +13,7 @@ Multi-threaded (parallel) tar.bz2 archiving of a directory with lowest priority 
 
 ## Installation
 
-RPMs are [built from releases](https://copr.fedorainfracloud.org/coprs/chotaire/parazip/ "Parazip Repos on Fedora copr") for CentOS 7 (requires EPEL) and all currently supported Fedora versions.
+RPMs are [built from releases](https://copr.fedorainfracloud.org/coprs/chotaire/parazip/ "Parazip Repos on Fedora copr") for CentOS 6/7 (requires EPEL) and all currently supported Fedora versions.
 
 ### Fedora
 ```Shell
