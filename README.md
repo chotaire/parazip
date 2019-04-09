@@ -48,4 +48,4 @@ Will check for dependencies and install if not available.
 
 `parazip <dir>`
 
-Where \<dir\> is a directory name found in the **current** directory.
+\<dir\>.tar.bz2 will be saved in your current working directory.
