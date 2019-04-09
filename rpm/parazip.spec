@@ -1,5 +1,5 @@
 Name: parazip
-Version: 0.2.2
+Version: 0.2.3
 Release: 1%{?dist}
 Summary: Parallel (multi-threaded) tar.bz2 archiving of a directory with lowest priority CPU and I/O scheduling.
 
@@ -38,9 +38,13 @@ install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
-* Mon Apr  8 2019 chotaire <chotaire@chotaire.net>
-- Now displays version when viewing --help
-- This release is also used for testing dnf updates and autobuild
+* Tue Apr  9 2019 chotaire <chotaire@chotaire.net>
+- Parazip will now save archive into current working directory.
+- This way it is now possible to pack directories from outside CWD.
 
 * Mon Apr  8 2019 chotaire <chotaire@chotaire.net>
-- Initial RPM release
+- Now displays version when viewing --help.
+- This release is also used for testing dnf updates and autobuild.
+
+* Mon Apr  8 2019 chotaire <chotaire@chotaire.net>
+- Initial RPM release.
