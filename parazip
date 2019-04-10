@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Multi-threaded (parallel) bzip2 of a directory with lowest priority CPU/IO scheduling.
+# Parallel (multi threaded) bzip2 of a directory with lowest priority CPU/IO scheduling.
 # Utilizes all cpu cores and detaches into background, will syslog when it's done.
 # Originally written by (c) 2019 Chotaire - https://github.com/chotaire/parazip
 
@@ -9,7 +9,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 version=0.3
-debug=1
+debug=0
 
 set -- ${1:-help} ${@:2:$#}
 
@@ -31,7 +31,8 @@ then
 
 elif [ "$1" = "install" ]
 then
-        if ((grep -q -i "centos" /etc/os-release) || (grep -q -i "fedora" /etc/os-release) || (grep -q -i "rhel" /etc/os-release)) then
+        if ((grep -q -i "centos" /etc/os-release) || (grep -q -i "fedora" /etc/os-release) || (grep -q -i "rhel" /etc/os-release))
+        then
                 if ! rpm -qa | grep -qw util-linux
                 then
                         yum install util-linux -y
@@ -44,10 +45,14 @@ then
                 then
                         yum install pbzip2 -y
                 fi
+                # if ([ "$debug" = "1" ] || [ "$debug" = "yes" ] || [ "$debug" = "true" ])
+                # then
+                #       echo ""
+                # fi
+                echo -e "[\e[92mOK\e[0m] All dependencies are already installed, there is nothing to do."
         else
-                echo "No Redhat-based operating system found. Please install dependancies manually."
+                echo -e "[\e[91mFAIL\e[0m] No Redhat-based operating system found. Please install dependancies manually."
         fi
-
 else
 
         currentdir=$PWD
@@ -59,10 +64,16 @@ else
                 echo ""
         fi
 
-        nohup bash -c "tar -c $dirname | pbzip2 -vc > $currentdir/$dirname.tar.bz2 ; logger -t parazip Finished." </dev/null &>/dev/null &
+        echo -e "[\e[92mOK\e[0m] Started archiving directory \e[1m$dirname\e[0m to \e[1m$currentdir$dirname.tar.bz2\e[0m"
+
+        nohup bash -c "logger -t parazip \"Multi-threaded archiving of directory $dirname to $currentdir$dirname.tar.bz2 has started\" ; tar -c $dirname | pbzip2 -vc > $currentdir/$dirname.tar.bz2 ; logger -t parazip \"Multi-threaded archiving of directory $dirname to $currentdir$dirname.tar.bz2 has finished\"" </dev/null &>/dev/null &
         sleep 1
         PID=$(pgrep -f "pbzip2")
         PID2=$(pgrep -f "tar -c")
-        renice +20 $PID $PID2
-        ionice -c 3 -p $PID $PID2
+
+        echo -e "[\e[92mOK\e[0m] Renicing parazip threads to lowest CPU priority."
+        renice +20 $PID $PID2 </dev/null &>/dev/null
+        echo -e "[\e[92mOK\e[0m] Renicing parazip threads to lowest I/O priority."
+        ionice -t -c 3 -p $PID $PID2
+        echo -e "[\e[92mOK\e[0m] Detached into background. Please check your syslogs."
 fi
