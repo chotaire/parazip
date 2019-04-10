@@ -27,7 +27,7 @@ then
         echo -e "\e[92mparazip\e[0m version $version - https://github.com/chotaire/parazip"
         echo ""
         echo "parazip <dir> (<dir>.tar.bz2 will be saved in your current working directory)"
-        echo "parazip install (will check for dependancies and install if not available)"
+        echo "parazip install (on CentOS/Fedora, will check for and install dependancies)"
 
 elif [ "$1" = "install" ]
 then

@@ -44,7 +44,7 @@ chmod ugo+x parazip ; mv parazip /usr/local/bin
 
 `parazip install`
 
-Will check for dependencies and install if not available.
+Will check for dependencies and install them (only relevant if not installing from copr).
 
 ### Run Parazip
 
