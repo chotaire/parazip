@@ -44,10 +44,10 @@ chmod ugo+x parazip ; mv parazip /usr/local/bin
 
 `parazip install`
 
-Will check for dependencies and install them (only relevant if not installing from copr).
+Will check for dependencies and install them (only relevant if not installing from RPM/copr).
 
 ### Run Parazip
 
 `parazip <dir>`
 
-\<dir\>.tar.bz2 will be saved in your current working directory.
+Archive a directory, \<dir\>.tar.bz2 will be saved in your current working directory.
