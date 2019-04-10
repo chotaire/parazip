@@ -1,5 +1,5 @@
 Name: parazip
-Version: 0.2.3
+Version: 0.3
 Release: 1%{?dist}
 Summary: Multi-threaded (parallel) tar.bz2 archiving of a directory with lowest priority CPU and I/O scheduling.
 
@@ -39,6 +39,8 @@ install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 
 %changelog
 * Tue Apr  9 2019 chotaire <chotaire@chotaire.net>
+- Fixed missing output (and made more verbose), syslogging improved.
+- Now accepting multiple args, added some debug code (use debug=1).
 - Parazip will now save archive into current working directory.
 - This way it is now possible to pack directories from outside CWD.
 
