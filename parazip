@@ -8,7 +8,19 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-version=0.2.3
+version=0.3
+debug=1
+
+set -- ${1:-help} ${@:2:$#}
+
+if ([ "$debug" = "1" ] || [ "$debug" = "yes" ] || [ "$debug" = "true" ])
+then
+        echo -e "[\e[93mDEBUG\e[0m] Received arguments from stdin: \e[93m$*\e[0m"
+        if ([ "$1" = "" ] || [ "$1" = "help" ] || [ "$1" = "--help" ])
+        then
+        echo ""
+        fi
+fi
 
 if ([ "$1" = "" ] || [ "$1" = "help" ] || [ "$1" = "--help" ])
 then
@@ -37,8 +49,16 @@ then
         fi
 
 else
+
         currentdir=$PWD
         dirname=$(echo $1 | sed 's:/*$::')
+
+        if ([ "$debug" = "1" ] || [ "$debug" = "yes" ] || [ "$debug" = "true" ])
+        then
+                echo -e "[\e[93mDEBUG\e[0m] Current directory: \e[93m$currentdir\e[0m"
+                echo ""
+        fi
+
         nohup bash -c "tar -c $dirname | pbzip2 -vc > $currentdir/$dirname.tar.bz2 ; logger -t parazip Finished." </dev/null &>/dev/null &
         sleep 1
         PID=$(pgrep -f "pbzip2")
