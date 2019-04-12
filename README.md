@@ -2,9 +2,11 @@
 
 ## Introduction
 
-Multi-threaded (parallel) tar.bz2 archiving of a directory with lowest priority CPU and I/O scheduling. Utilizes all cpu cores and detaches into background, will syslog when it's done.
+Multi-threaded (parallel) tar.bz2 archiving of a directory with lowest priority CPU and I/O scheduling. Utilizes all cpu cores and detaches into background, will syslog when it's done. Will install missing dependancies on RHEL based operating systems.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3957b4329a2f43348d6c90049f6d427f)](https://www.codacy.com/app/chotaire/parazip?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chotaire/parazip&amp;utm_campaign=Badge_Grade)
+
+[![asciicast](https://asciinema.org/a/240434.svg)](https://asciinema.org/a/240434)
 
 ## Dependencies on CentOS/RHEL/Fedora
 *   util-linux
@@ -55,3 +57,5 @@ Usage: parazip [-V|--(no-)verbose] [-F|--(no-)foreground] [-S|--(no-)syslog]
 
 You need to pass at least one argument (the 'source-dir' to be archived).
 ```
+
+Archive a directory, \<dir\>.tar.bz2 will be saved in your current working directory.
