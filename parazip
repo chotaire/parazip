@@ -212,7 +212,6 @@ echo -e "[\e[94mINFO\e[0m] The \e[1mmessage\e[0m option is not yet implemented."
 fi
 
 dirname=$(echo $_arg_source_dir | sed 's:/*$::')
-
 echo -e "[\e[92mOK\e[0m] Started archiving directory \e[1m$dirname\e[0m to \e[1m$_arg_destination_dir$dirname.tar.bz2\e[0m"
 
 if ([ "$_arg_syslog" = "on" ])
@@ -221,6 +220,7 @@ then
 else 
    nohup bash -c "tar -c $dirname | pbzip2 -vc > $_arg_destination_dir/$dirname.tar.bz2" </dev/null &>/dev/null &
 fi
+
 sleep 1
 PID=$(pgrep -f "pbzip2")
 PID2=$(pgrep -f "tar -c")
@@ -229,6 +229,7 @@ echo -e "[\e[92mOK\e[0m] Renicing parazip threads to lowest CPU priority."
 renice +20 $PID $PID2 </dev/null &>/dev/null
 echo -e "[\e[92mOK\e[0m] Renicing parazip threads to lowest I/O priority."
 ionice -t -c 3 -p $PID $PID2
+
 if ([ "$_arg_syslog" = "on" ])
 then
     echo -e "[\e[92mOK\e[0m] Detached into background. Keep an eye on your syslogs."
