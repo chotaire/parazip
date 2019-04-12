@@ -8,30 +8,41 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-version=0.3
-debug=0
+version="0.4"
 
-set -- ${1:-help} ${@:2:$#}
+die()
+{
+        local _ret=$2
+        test -n "$_ret" || _ret=1
+        test "$_PRINT_HELP" = yes && print_help >&2
+        echo "$1" >&2
+        exit ${_ret}
+}
 
-if ([ "$debug" = "1" ] || [ "$debug" = "yes" ] || [ "$debug" = "true" ])
-then
-        echo -e "[\e[93mDEBUG\e[0m] Received arguments from stdin: \e[93m$*\e[0m"
-        if ([ "$1" = "" ] || [ "$1" = "help" ] || [ "$1" = "--help" ])
-        then
-        echo ""
-        fi
-fi
+evaluate_strictness()
+{
+        [[ "$2" =~ ^--?[a-zA-Z] ]] && die "You have passed '$2' as a value of argument '$1'. It looks like that you are trying to pass an option instead of the actual value, which is considered a fatal error."
+}
 
-if ([ "$1" = "" ] || [ "$1" = "help" ] || [ "$1" = "--help" ])
-then
-        echo -e "\e[92mparazip\e[0m version $version - https://github.com/chotaire/parazip"
-        echo ""
-        echo "parazip <dir> (<dir>.tar.bz2 will be saved in your current working directory)"
-        echo "parazip install (on CentOS/Fedora, will check for and install dependancies)"
+begins_with_short_option()
+{
+        local first_option all_short_options
+        all_short_options='hIVFSMv'
+        first_option="${1:0:1}"
+        test "$all_short_options" = "${all_short_options/$first_option/}" && return 1 || return 0
+}
 
-elif [ "$1" = "install" ]
-then
-        if ((grep -q -i "centos" /etc/os-release) || (grep -q -i "fedora" /etc/os-release) || (grep -q -i "rhel" /etc/os-release))
+_positionals=()
+_arg_source_dir=
+_arg_destination_dir="."
+_arg_verbose="off"
+_arg_foreground="off"
+_arg_syslog="off"
+_arg_message="off"
+
+install()
+{
+    if ((grep -q -i "centos" /etc/os-release) || (grep -q -i "fedora" /etc/os-release) || (grep -q -i "rhel" /etc/os-release))
         then
                 if ! rpm -qa | grep -qw util-linux
                 then
@@ -45,28 +56,171 @@ then
                 then
                         yum install pbzip2 -y
                 fi
-                # if ([ "$debug" = "1" ] || [ "$debug" = "yes" ] || [ "$debug" = "true" ])
-                # then
-                #       echo ""
-                # fi
                 echo -e "[\e[92mOK\e[0m] All dependencies are already installed, there is nothing to do."
         else
                 echo -e "[\e[91mFAIL\e[0m] No Redhat-based operating system found. Please install dependancies manually."
-        fi
-else
+    fi
+}
 
-        currentdir=$PWD
-        dirname=$(echo $1 | sed 's:/*$::')
+print_help ()
+{
+        printf 'Usage: \e[92mparazip\e[0m [-V|--(no-)verbose] [-F|--(no-)foreground] [-S|--(no-)syslog]\n[-M|--(no-)message] [-v|--version] [-I|--install] <source-dir> [<dest-dir>]\n' "$0"
+        printf '\n'
+        printf '%s\n' "<source-dir>                      Source directory (single mandatory option)"
+        printf '%s\n' "<dest-dir>                        Destination directory (default: '.')"
+        printf '\n'
+        printf '%s\n' "-V,--verbose,--no-verbose         Display more verbose output  (off by default)"
+        printf '%s\n' "-F,--foreground,--no-foreground   No detaching into background (off by default)"
+        printf '%s\n' "-S,--syslog,--no-syslog           Log start/end time to syslog (off by default)"
+        printf '%s\n' "-M,--message,--no-message         Send tty msg upon completion (off by default)"
+        printf '%s\n' "-I,--install                      Check for and install software dependencies"
+        printf '%s\n' "-h,--help                         Prints this help"
+        printf '%s\n' "-v,--version                      Prints version"
+        printf '\n'
+}
 
-        if ([ "$debug" = "1" ] || [ "$debug" = "yes" ] || [ "$debug" = "true" ])
+# Argument parsing made with help of argbash, Copyright (c) 2015-2019, Matěj Týč
+# License and disclaimer: https://raw.githubusercontent.com/matejak/argbash/master/LICENSE
+parse_commandline ()
+{
+        while test $# -gt 0
+        do
+                _key="$1"
+                case "$_key" in
+                        -V|--no-verbose|--verbose)
+                                _arg_verbose="on"
+                                test "${1:0:5}" = "--no-" && _arg_verbose="off"
+                                ;;
+                        -V*)
+                                _arg_verbose="on"
+                                _next="${_key##-V}"
+                                if test -n "$_next" -a "$_next" != "$_key"
+                                then
+                                        begins_with_short_option "$_next" && shift && set -- "-V" "-${_next}" "$@" || die "The short option '$_key' can't be decomposed to ${_key:0:2} and -${_key:2}, because ${_key:0:2} doesn't accept value and '-${_key:2:1}' doesn't correspond to a short option."
+                                fi
+                                ;;
+                        -F|--no-foreground|--foreground)
+                                _arg_foreground="on"
+                                test "${1:0:5}" = "--no-" && _arg_foreground="off"
+                                ;;
+                        -F*)
+                                _arg_foreground="on"
+                                _next="${_key##-F}"
+                                if test -n "$_next" -a "$_next" != "$_key"
+                                then
+                                        begins_with_short_option "$_next" && shift && set -- "-F" "-${_next}" "$@" || die "The short option '$_key' can't be decomposed to ${_key:0:2} and -${_key:2}, because ${_key:0:2} doesn't accept value and '-${_key:2:1}' doesn't correspond to a short option."
+                                fi
+                                ;;
+                        -S|--no-syslog|--syslog)
+                                _arg_syslog="on"
+                                test "${1:0:5}" = "--no-" && _arg_syslog="off"
+                                ;;
+                        -S*)
+                                _arg_syslog="on"
+                                _next="${_key##-S}"
+                                if test -n "$_next" -a "$_next" != "$_key"
+                                then
+                                        begins_with_short_option "$_next" && shift && set -- "-S" "-${_next}" "$@" || die "The short option '$_key' can't be decomposed to ${_key:0:2} and -${_key:2}, because ${_key:0:2} doesn't accept value and '-${_key:2:1}' doesn't correspond to a short option."
+                                fi
+                                ;;
+                        -M|--no-message|--message)
+                                _arg_message="on"
+                                test "${1:0:5}" = "--no-" && _arg_message="off"
+                                ;;
+                        -M*)
+                                _arg_message="on"
+                                _next="${_key##-M}"
+                                if test -n "$_next" -a "$_next" != "$_key"
+                                then
+                                        begins_with_short_option "$_next" && shift && set -- "-M" "-${_next}" "$@" || die "The short option '$_key' can't be decomposed to ${_key:0:2} and -${_key:2}, because ${_key:0:2} doesn't accept value and '-${_key:2:1}' doesn't correspond to a short option."
+                                fi
+                                ;;
+                        -v|--version)
+                                echo -e "\e[92mparazip\e[0m version $version - Please contribute at https://github.com/chotaire/parazip"
+                                exit 0
+                                ;;
+                        -v*)
+                                echo -e "\e[92mparazip\e[0m version $version - Please contribute at https://github.com/chotaire/parazip"
+                                exit 0
+                                ;;
+                        -I|--install)
+                                install
+                                exit 0
+                                ;;
+                        -I*)
+                                install
+                                exit 0
+                                ;;
+                        -h|--help)
+                                print_help
+                                exit 0
+                                ;;
+                        -h*)
+                                print_help
+                                exit 0
+                                ;;
+                        *)
+                                _positionals+=("$1")
+                                ;;
+                esac
+                shift
+        done
+}
+
+
+handle_passed_args_count ()
+{
+        _required_args_string="'source-dir'"
+        test ${#_positionals[@]} -ge 1 || _PRINT_HELP=yes die "You need to pass at least one argument (the $_required_args_string to be archived)." 1
+        test ${#_positionals[@]} -le 2 || _PRINT_HELP=yes die "There were too many arguments. We expect between 1 and 2 (at least: $_required_args_string), but got ${#_positionals[@]} (the last one was: '${_positionals[*]: -1}')." 1
+}
+
+assign_positional_args ()
+{
+        _positional_names=('_arg_source_dir' '_arg_destination_dir' )
+
+        for (( ii = 0; ii < ${#_positionals[@]}; ii++))
+        do
+                eval "${_positional_names[ii]}=\${_positionals[ii]}" || die "Error during argument parsing, the Internet is broken." 1
+                evaluate_strictness "${_positional_names[ii]}" "${_positionals[ii]##_arg}"
+        done
+}
+
+parse_commandline "$@"
+handle_passed_args_count
+assign_positional_args
+
+if ([ "$_arg_verbose" = "on" ])
+then
+    echo -e "[\e[94mINFO\e[0m] The following options were supplied:"
+    echo -e "       Source-Dir: \e[1m$_arg_source_dir\e[0m"
+    echo -e "       Dest-Dir: \e[1m$_arg_destination_dir\e[0m"
+    echo -e "       Verbose: \e[1m$_arg_verbose\e[0m"
+    echo -e "       Foreground: \e[1m$_arg_foreground\e[0m"
+    echo -e "       Syslog: \e[1m$_arg_syslog\e[0m"
+    echo -e "       Message: \e[1m$_arg_message\e[0m"
+fi
+
+if ([ "$_arg_foreground" = "on" ])
+then
+echo -e "[\e[94mINFO\e[0m] The \e[1mforeground\e[0m option is not yet implemented."
+fi
+
+if ([ "$_arg_message" = "on" ])
+then
+echo -e "[\e[94mINFO\e[0m] The \e[1mmessage\e[0m option is not yet implemented."
+fi
+
+        dirname=$(echo $_arg_source_dir | sed 's:/*$::')
+
+        echo -e "[\e[92mOK\e[0m] Started archiving directory \e[1m$dirname\e[0m to \e[1m$_arg_destination_dir$dirname.tar.bz2\e[0m"
+
+        if ([ "$_arg_syslog" = "on" ])
         then
-                echo -e "[\e[93mDEBUG\e[0m] Current directory: \e[93m$currentdir\e[0m"
-                echo ""
+            nohup bash -c "logger -t parazip \"Multi-threaded archiving of directory $dirname to $_arg_destination_dir$dirname.tar.bz2 has started\" ; tar -c $dirname | pbzip2 -vc > $_arg_destination_dir/$dirname.tar.bz2 ; logger -t parazip \"Multi-threaded archiving of directory $dirname to $_arg_destination_dir$dirname.tar.bz2 has finished\"" </dev/null &>/dev/null &
+        else 
+           nohup bash -c "tar -c $dirname | pbzip2 -vc > $_arg_destination_dir/$dirname.tar.bz2" </dev/null &>/dev/null &
         fi
-
-        echo -e "[\e[92mOK\e[0m] Started archiving directory \e[1m$dirname\e[0m to \e[1m$currentdir$dirname.tar.bz2\e[0m"
-
-        nohup bash -c "logger -t parazip \"Multi-threaded archiving of directory $dirname to $currentdir$dirname.tar.bz2 has started\" ; tar -c $dirname | pbzip2 -vc > $currentdir/$dirname.tar.bz2 ; logger -t parazip \"Multi-threaded archiving of directory $dirname to $currentdir$dirname.tar.bz2 has finished\"" </dev/null &>/dev/null &
         sleep 1
         PID=$(pgrep -f "pbzip2")
         PID2=$(pgrep -f "tar -c")
@@ -75,5 +229,10 @@ else
         renice +20 $PID $PID2 </dev/null &>/dev/null
         echo -e "[\e[92mOK\e[0m] Renicing parazip threads to lowest I/O priority."
         ionice -t -c 3 -p $PID $PID2
-        echo -e "[\e[92mOK\e[0m] Detached into background. Please check your syslogs."
-fi
+        if ([ "$_arg_syslog" = "on" ])
+        then
+            echo -e "[\e[92mOK\e[0m] Detached into background. Keep an eye on your syslogs."
+        else
+            echo -e "[\e[92mOK\e[0m] Detached into background. Keep an eye on your process list."
+        fi
+        exit 0
