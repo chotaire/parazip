@@ -48,6 +48,22 @@ Will check for dependencies and install them (only relevant if not installing fr
 
 ### Run Parazip
 
-`parazip <dir>`
+```Shell
+Usage: parazip [-V|--(no-)verbose] [-F|--(no-)foreground] [-S|--(no-)syslog]
+[-M|--(no-)message] [-v|--version] [-I|--install] <source-dir> [<dest-dir>]
+
+<source-dir>                      Source directory (single mandatory option)
+<dest-dir>                        Destination directory (default: '.')
+
+-V,--verbose,--no-verbose         Display more verbose output  (off by default)
+-F,--foreground,--no-foreground   No detaching into background (off by default)
+-S,--syslog,--no-syslog           Log start/end time to syslog (off by default)
+-M,--message,--no-message         Send tty msg upon completion (off by default)
+-I,--install:                     Check for and install software dependencies
+-h,--help:                        Prints this help
+-v,--version:                     Prints version
+
+You need to pass at least one argument (the 'source-dir' to be archived).
+```
 
 Archive a directory, \<dir\>.tar.bz2 will be saved in your current working directory.
