@@ -30,7 +30,7 @@ yum copr enable chotaire/parazip
 yum install parazip
 ```
 
-### openSUSE / SLE, Mageia, Scientific Linux, PowerKVM (PPC)
+### openSUSE / SLE, Mageia, Scientific Linux
 *   Repositories are available here: [OBS](https://software.opensuse.org//download.html?project=home%3Achotaire&package=parazip)
 
 ### Other Linux
