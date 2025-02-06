@@ -4,7 +4,7 @@
 
 Multi-threaded (parallel) tar.bz2 archiving of a directory with lowest priority CPU and I/O scheduling. Utilizes all cpu cores and detaches into background, will syslog when it's done.
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3957b4329a2f43348d6c90049f6d427f)](https://www.codacy.com/app/chotaire/parazip?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chotaire/parazip&amp;utm_campaign=Badge_Grade) [![Copr build status](https://copr.fedorainfracloud.org/coprs/chotaire/parazip/package/parazip/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/chotaire/parazip/package/parazip/)
+[![Copr build status](https://copr.fedorainfracloud.org/coprs/chotaire/parazip/package/parazip/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/chotaire/parazip/package/parazip/)
 
 [![asciicast](https://asciinema.org/a/240434.svg)](https://asciinema.org/a/240434)
 
